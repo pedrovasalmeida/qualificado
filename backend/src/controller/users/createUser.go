@@ -1,20 +1,25 @@
 package users_controller
 
 import (
+	"api/src/configuration/logger"
 	"api/src/configuration/validation"
 	user_model "api/src/controller/users/model"
-	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+)
+
+var (
+	logJourneyCreateUser = zap.String("journey", "createUser")
 )
 
 func CreateUser(c *gin.Context) {
+	logger.Info("Init CreateUser controller", logJourneyCreateUser)
 	var user_request user_model.Request
 
 	if err := c.ShouldBindJSON(&user_request); err != nil {
-		log.Printf("Error while creating user, error=%s\n", err.Error())
+		logger.Error("Error trying to validate user info", err, logJourneyCreateUser)
 		restErr := validation.ValidateUserError(err)
 
 		c.JSON(restErr.Code, restErr)
@@ -26,6 +31,6 @@ func CreateUser(c *gin.Context) {
 		Email: user_request.Email,
 		Name: user_request.Name,
 	} 
-	fmt.Println(user_response)
+	logger.Info("User created", logJourneyCreateUser)
 	c.JSON(http.StatusOK, &user_response)
 }
