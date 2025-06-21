@@ -4,6 +4,7 @@ import (
 	"api/src/configuration/logger"
 	"api/src/configuration/validation"
 	user_model "api/src/controller/users/model"
+	model "api/src/model/user"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ import (
 
 var (
 	logJourneyCreateUser = zap.String("journey", "createUser")
+	UserDomainInterface model.UserDomainInterface
 )
 
 func CreateUser(c *gin.Context) {
@@ -26,11 +28,16 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	user_response := &user_model.Response{
-		ID: user_request.Name,
-		Email: user_request.Email,
-		Name: user_request.Name,
-	} 
+	domain := model.NewUserDomain(
+		user_request.Email, 
+		user_request.Password,
+		user_request.Name,
+	)
+
+	if err := domain.CreateUser(); err != nil {
+		c.JSON(err.Code, err)
+	}
+
 	logger.Info("User created", logJourneyCreateUser)
-	c.JSON(http.StatusOK, &user_response)
+	c.JSON(http.StatusOK, "")
 }
