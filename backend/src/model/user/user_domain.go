@@ -3,7 +3,6 @@ package model
 import (
 	"api/src/configuration/logger"
 
-	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -14,14 +13,14 @@ type userDomain struct {
 }
 
 func (ud *userDomain) EncryptPassword() bool {
-	logger.Info("Starting password encryption", zap.String("journey", "encryptPassword"))
+	logger.Info("Starting password encryption", "encryptPassword")
 	raw := []byte(ud.password)
 	hash, err := bcrypt.GenerateFromPassword(raw, bcrypt.DefaultCost)
 	if err != nil {
-		logger.Error("Error encrypting password", err, zap.String("journey", "encryptPassword"))
+		logger.Error("Error encrypting password", err, "encryptPassword")
 		return false
 	}
-	logger.Info("Finish password encryption", zap.String("journey", "encryptPassword"))
+	logger.Info("Finish password encryption", "encryptPassword")
 	ud.password = string(hash)
 	return true
 }

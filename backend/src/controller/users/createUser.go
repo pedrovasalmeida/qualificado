@@ -18,11 +18,11 @@ var (
 )
 
 func (uc *userControllerInterface) CreateUser(c *gin.Context) {
-	logger.Info("Init CreateUser controller", logJourneyCreateUser)
+	logger.Info("Init CreateUser controller", "CreateUser", logJourneyCreateUser)
 	var user_request user_model.Request
 
 	if err := c.ShouldBindJSON(&user_request); err != nil {
-		logger.Error("Error trying to validate user info", err, logJourneyCreateUser)
+		logger.Error("Error trying to validate user info", err, "CreateUser", logJourneyCreateUser)
 		restErr := validation.ValidateUserError(err)
 
 		c.JSON(restErr.Code, restErr)
@@ -39,6 +39,6 @@ func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 		c.JSON(err.Code, err)
 	}
 
-	logger.Info("User created", logJourneyCreateUser)
+	logger.Info("User created", "CreateUser", logJourneyCreateUser)
 	c.JSON(http.StatusOK, view.ConvertUserDomainToResponse(domain))
 }

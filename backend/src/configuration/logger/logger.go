@@ -11,6 +11,7 @@ import (
 
 var (
 	log *zap.Logger
+	zapIdentificatorKey = "flow"
 )
 
 func getZapOutputPaths() string {
@@ -52,12 +53,20 @@ func init() {
 	log, _ = logConfig.Build()
 }
 
-func Info(message string, tags ...zap.Field) {
+func Info(message string, identificator string, tags ...zap.Field) {
+	if identificator != "" {
+		f := zap.String(zapIdentificatorKey, identificator)
+		tags = append([]zap.Field{f}, tags...)
+	}
 	log.Info(message, tags...)
 	log.Sync()
 }
 
-func Error(message string, err error, tags ...zap.Field) {
+func Error(message string, err error, identificator string, tags ...zap.Field) {
+	if identificator != "" {
+		f := zap.String(zapIdentificatorKey, identificator)
+		tags = append([]zap.Field{f}, tags...)
+	}
 	tags = append(tags, zap.NamedError("error", err))
 	log.Info(message, tags...)
 	log.Sync()
