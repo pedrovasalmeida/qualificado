@@ -14,7 +14,7 @@ var (
 )
 
 func getZapOutputPaths() string {
-	output := strings.ToLower(strings.TrimSpace(os.Getenv(env.ENV_LOGGER_LOG_OUTPUT)))
+	output := strings.ToLower(strings.TrimSpace(os.Getenv(env.LOGGER_LOG_OUTPUT)))
 	if output == "" {
 		return "stdout"
 	}
@@ -22,7 +22,7 @@ func getZapOutputPaths() string {
 }
 
 func getZapLevels() zapcore.Level {
-	switch strings.ToLower(strings.TrimSpace(os.Getenv(env.ENV_LOGGER_LOG_LEVEL))) {
+	switch strings.ToLower(strings.TrimSpace(os.Getenv(env.LOGGER_LOG_LEVEL))) {
 		case "info":
 			return zapcore.InfoLevel
 		case "error":

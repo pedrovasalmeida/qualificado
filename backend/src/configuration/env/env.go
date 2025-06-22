@@ -6,8 +6,9 @@ import (
 )
 
 var (
-	ENV_LOGGER_LOG_OUTPUT string
-	ENV_LOGGER_LOG_LEVEL string
+	LOGGER_LOG_OUTPUT string
+	LOGGER_LOG_LEVEL string
+	DATABASE_URL string
 )
 
 func normalizeValuesFromEnv(value string) string {
@@ -21,6 +22,7 @@ func getVariableFromEnv(key string) string {
 }
 
 func init() {
-	ENV_LOGGER_LOG_OUTPUT = getVariableFromEnv("LOG_OUTPUT")
-	ENV_LOGGER_LOG_LEVEL = getVariableFromEnv("LOG_LEVEL")
+	LOGGER_LOG_OUTPUT = getVariableFromEnv("LOG_OUTPUT")
+	LOGGER_LOG_LEVEL = getVariableFromEnv("LOG_LEVEL")
+	DATABASE_URL = getVariableFromEnv("DATABASE_URL")
 }
