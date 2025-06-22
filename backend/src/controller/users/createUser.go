@@ -5,6 +5,7 @@ import (
 	"api/src/configuration/validation"
 	user_model "api/src/controller/users/model"
 	model "api/src/model/user"
+	service "api/src/service/user"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,8 +34,8 @@ func CreateUser(c *gin.Context) {
 		user_request.Password,
 		user_request.Name,
 	)
-
-	if err := domain.CreateUser(); err != nil {
+	service := service.NewUserDomainService()
+	if err := service.CreateUser(domain); err != nil {
 		c.JSON(err.Code, err)
 	}
 
