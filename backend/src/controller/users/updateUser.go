@@ -2,6 +2,6 @@ package users_controller
 
 import "github.com/gin-gonic/gin"
 
-func UpdateUserById(c *gin.Context) {
+func (uc *userControllerInterface) UpdateUserById(c *gin.Context) {
 	
 }
