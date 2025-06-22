@@ -3,26 +3,38 @@ package model
 import (
 	"api/src/configuration/logger"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type userDomain struct {
+	id string
 	email string
 	password string
 	name string
 }
 
-func (ud *userDomain) EncryptPassword() bool {
+type UserDomainInterface interface {
+	GetId() string
+	GetEmail() string
+	GetPassword() string
+	GetName() string
+}
+
+func (ud *userDomain) encryptPassword() {
 	logger.Info("Starting password encryption", "encryptPassword")
 	raw := []byte(ud.password)
 	hash, err := bcrypt.GenerateFromPassword(raw, bcrypt.DefaultCost)
 	if err != nil {
 		logger.Error("Error encrypting password", err, "encryptPassword")
-		return false
+		return
 	}
-	logger.Info("Finish password encryption", "encryptPassword")
 	ud.password = string(hash)
-	return true
+	logger.Info("Finish password encryption", "encryptPassword")
+}
+
+func (ud *userDomain) GetId() string {
+	return ud.id
 }
 
 func (ud *userDomain) GetEmail() string {
@@ -37,15 +49,9 @@ func (ud *userDomain) GetName() string {
 	return ud.name
 }
 
-type UserDomainInterface interface {
-	GetEmail() string
-	GetPassword() string
-	GetName() string
-	EncryptPassword() bool
-}
-
 func NewUserDomain(email, password, name string) UserDomainInterface {
-	return &userDomain{
-		email, password, name,
-	}
+	id := uuid.New().String()
+	user := &userDomain{ id, email, password, name }
+	user.encryptPassword()
+	return user
 }
