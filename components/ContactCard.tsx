@@ -1,15 +1,19 @@
 "use client";
 
 import { Phone, MessageCircle, Info, Heart, MapPin } from "lucide-react";
+import { formatPhoneDisplay } from "@/lib/phone";
+import { showToast } from "@/lib/toast";
+import { useWhatsApp } from "@/hooks/useWhatsApp";
 
 export interface Contact {
-  id: number;
+  id: string;
   name: string;
   service: string;
   summary: string;
   description: string;
   phone: string;
   cities: string[];
+  status: "show" | "hidden";
 }
 
 interface ContactCardProps {
@@ -20,18 +24,38 @@ interface ContactCardProps {
   index?: number; // for staggered animation
 }
 
-export default function ContactCard({ contact, onOpenDetails, isFavorite = false, onToggleFavorite, index = 0 }: ContactCardProps) {
+export default function ContactCard({
+  contact,
+  onOpenDetails,
+  isFavorite = false,
+  onToggleFavorite,
+  index = 0,
+}: ContactCardProps) {
+  const { openWhatsApp } = useWhatsApp();
+
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const phoneNumber = contact.phone.replace(/\D/g, "");
-    window.open(`https://wa.me/55${phoneNumber}`, "_blank");
+    openWhatsApp(contact.phone);
+  };
+
+  const handleCardClick = () => {
+    navigator.clipboard.writeText(contact.phone);
+    showToast.success("Número copiado!");
   };
 
   return (
     <div
-      className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800/80 p-5 transition-all duration-300 hover:border-zinc-700 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:-translate-y-1 cursor-pointer animate-in fade-in slide-in-from-bottom-4 fill-mode-both"
-      style={{ animationDelay: `${index * 50}ms`, animationDuration: '500ms' }}
-      onClick={() => onOpenDetails(contact)}
+      className="group relative flex flex-col justify-between overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 cursor-pointer animate-in fade-in slide-in-from-bottom-4 fill-mode-both"
+      style={{
+        animationDelay: `${index * 50}ms`,
+        animationDuration: "500ms",
+        background: "rgba(39, 39, 42, 0.6)",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+        backdropFilter: "blur(6.3px)",
+        WebkitBackdropFilter: "blur(6.3px)",
+        border: "1px solid rgb(63, 63, 70)",
+      }}
+      onClick={handleCardClick}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
@@ -44,7 +68,10 @@ export default function ContactCard({ contact, onOpenDetails, isFavorite = false
             onClick={onToggleFavorite}
             className="p-1.5 -m-1.5 rounded-full text-zinc-400 hover:text-red-400 hover:bg-zinc-800/50 transition-colors"
           >
-            <Heart size={18} className={isFavorite ? "fill-red-500 text-red-500" : ""} />
+            <Heart
+              size={18}
+              className={isFavorite ? "fill-red-500 text-red-500" : ""}
+            />
           </button>
         </div>
 
@@ -59,7 +86,10 @@ export default function ContactCard({ contact, onOpenDetails, isFavorite = false
         {contact.cities && contact.cities.length > 0 && (
           <div className="flex items-center gap-1.5 text-zinc-500 mb-5 text-xs font-medium">
             <MapPin size={14} />
-            <span>{contact.cities[0]} {contact.cities.length > 1 && `+${contact.cities.length - 1}`}</span>
+            <span>
+              {contact.cities[0]}{" "}
+              {contact.cities.length > 1 && `+${contact.cities.length - 1}`}
+            </span>
           </div>
         )}
       </div>
@@ -67,7 +97,7 @@ export default function ContactCard({ contact, onOpenDetails, isFavorite = false
       <div className="mt-auto space-y-4">
         <div className="flex items-center gap-2 text-zinc-300 text-sm font-medium bg-zinc-950/50 w-fit px-3 py-1.5 rounded-lg border border-zinc-800/50">
           <Phone className="h-4 w-4 text-blue-500" />
-          <span>{contact.phone}</span>
+          <span>{formatPhoneDisplay(contact.phone)}</span>
         </div>
 
         <div className="flex gap-2 pt-2 border-t border-zinc-800/50">
@@ -83,7 +113,7 @@ export default function ContactCard({ contact, onOpenDetails, isFavorite = false
           </button>
           <button
             onClick={handleWhatsApp}
-            className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-blue-500 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
+            className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-blue-800 px-4 py-2.5 text-sm font-bold text-white transition-all hover:bg-blue-500 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
           >
             <MessageCircle className="h-4 w-4" />
             WhatsApp
