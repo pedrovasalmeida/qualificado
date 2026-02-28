@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"mcp-supabase-qualificado": {
+			"url": "https://mcp.supabase.com/mcp?project_ref=fsthihzxizuaekfgwzbl",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}
