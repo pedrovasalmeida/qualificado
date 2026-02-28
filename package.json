@@ -22,7 +22,8 @@
     "sonner": "^2.0.7"
   },
   "optionalDependencies": {
-    "lightningcss-linux-x64-gnu": "*"
+    "lightningcss-linux-x64-gnu": "*",
+    "@tailwindcss/oxide-linux-x64-gnu": "*"
   },
   "devDependencies": {
     "@serwist/cli": "^9.5.6",
