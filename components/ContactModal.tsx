@@ -1,7 +1,7 @@
 "use client";
 
 import { X, Phone, MapPin, MessageCircle, Copy, Check } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { Contact } from "./ContactCard";
 import { formatPhoneDisplay } from "@/lib/phone";
 import { useWhatsApp } from "@/hooks/useWhatsApp";
@@ -45,10 +45,10 @@ export default function ContactModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
       <div
-        className="w-full max-w-md bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="w-full max-w-md max-h-[90vh] bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl flex flex-col animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative p-6">
+        <div className="relative p-6 overflow-y-auto flex-1">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 p-2 rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
@@ -65,8 +65,19 @@ export default function ContactModal({
             </h2>
 
             <div className="flex items-center gap-2 text-zinc-400 mb-6">
-              <MapPin size={16} className="text-zinc-500" />
-              <span className="text-sm">{contact.cities.join(" • ")}</span>
+              <div className="flex items-center gap-2 flex-wrap">
+                {contact.cities.map((city, index) => (
+                  <div
+                    key={city + index}
+                    className="flex items-center gap-1 px-1 py-0.5 rounded-md bg-zinc-800 border border-zinc-700"
+                  >
+                    <MapPin size={16} className="text-zinc-400" />
+                    <span className="text-sm text-zinc-400 font-medium">
+                      {city}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="space-y-4">
@@ -91,30 +102,29 @@ export default function ContactModal({
                     </span>
                   </div>
                 </div>
+                <button
+                  onClick={handleCopy}
+                  className="mt-4 w-full cursor-pointer flex-1 flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white py-3.5 px-4 rounded-xl font-medium transition-colors border border-zinc-700/50"
+                >
+                  {isCopied ? (
+                    <Check size={20} className="text-green-500" />
+                  ) : (
+                    <Copy size={20} className="text-zinc-400" />
+                  )}
+                  {isCopied ? "Copiado!" : "Copiar"}
+                </button>
               </div>
             </div>
           </div>
-
-          <div className="flex flex-col gap-3 pt-2">
-            <button
-              onClick={handleCopy}
-              className="cursor-pointer flex-1 flex items-center justify-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white py-3.5 px-4 rounded-xl font-medium transition-colors border border-zinc-700/50"
-            >
-              {isCopied ? (
-                <Check size={20} className="text-green-500" />
-              ) : (
-                <Copy size={20} className="text-zinc-400" />
-              )}
-              {isCopied ? "Copiado!" : "Copiar"}
-            </button>
-            <button
-              onClick={handleWhatsApp}
-              className="cursor-pointer flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white py-3.5 px-4 rounded-xl font-medium transition-colors shadow-lg shadow-[#25D366]/20"
-            >
-              <MessageCircle size={20} />
-              Chamar no WhatsApp
-            </button>
-          </div>
+        </div>
+        <div className="flex flex-col gap-3 p-6 pt-0 shrink-0">
+          <button
+            onClick={handleWhatsApp}
+            className="cursor-pointer flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white py-3.5 px-4 rounded-xl font-medium transition-colors shadow-lg shadow-[#25D366]/20"
+          >
+            <MessageCircle size={20} />
+            Chamar no WhatsApp
+          </button>
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@ export async function getContacts(): Promise<Contact[]> {
 }
 
 export async function createContact(
-  contact: Omit<Contact, "id" | "status">
+  contact: Omit<Contact, "id" | "status">,
 ): Promise<{ success: boolean; error?: string }> {
   const digits = contact.phone.replace(/\D/g, "");
   if (digits.length < 10) {
@@ -32,6 +32,7 @@ export async function createContact(
     description: contact.description,
     phone: contact.phone,
     cities: contact.cities,
+    status: null,
   });
 
   if (error) {

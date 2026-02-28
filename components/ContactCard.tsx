@@ -49,7 +49,6 @@ export default function ContactCard({
       style={{
         animationDelay: `${index * 50}ms`,
         animationDuration: "500ms",
-        background: "rgba(39, 39, 42, 0.6)",
         boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         backdropFilter: "blur(6.3px)",
         WebkitBackdropFilter: "blur(6.3px)",
