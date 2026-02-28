@@ -1,8 +1,6 @@
 "use client";
 
-import { Phone, MessageCircle, Info, Heart, MapPin } from "lucide-react";
-import { formatPhoneDisplay } from "@/lib/phone";
-import { showToast } from "@/lib/toast";
+import { MessageCircle, Info, Heart, MapPin } from "lucide-react";
 import { useWhatsApp } from "@/hooks/useWhatsApp";
 
 export interface Contact {
@@ -38,11 +36,6 @@ export default function ContactCard({
     openWhatsApp(contact.phone);
   };
 
-  const handleCardClick = () => {
-    navigator.clipboard.writeText(contact.phone);
-    showToast.success("Número copiado!");
-  };
-
   return (
     <div
       className="group relative flex flex-col justify-between overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 cursor-pointer animate-in fade-in slide-in-from-bottom-4 fill-mode-both"
@@ -54,7 +47,7 @@ export default function ContactCard({
         WebkitBackdropFilter: "blur(6.3px)",
         border: "1px solid rgb(63, 63, 70)",
       }}
-      onClick={handleCardClick}
+      onClick={() => onOpenDetails(contact)}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
@@ -94,11 +87,6 @@ export default function ContactCard({
       </div>
 
       <div className="mt-auto space-y-4">
-        <div className="flex items-center gap-2 text-zinc-300 text-sm font-medium bg-zinc-950/50 w-fit px-3 py-1.5 rounded-lg border border-zinc-800/50">
-          <Phone className="h-4 w-4 text-blue-500" />
-          <span>{formatPhoneDisplay(contact.phone)}</span>
-        </div>
-
         <div className="flex gap-2 pt-2 border-t border-zinc-800/50">
           <button
             className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-zinc-800 px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-zinc-700"
