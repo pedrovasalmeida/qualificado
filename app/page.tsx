@@ -1,8 +1,8 @@
-import { getContacts } from "@/app/actions";
+import { getContactsCached } from "@/lib/data";
 import ContactCatalog from "@/components/ContactCatalog";
 
 export default async function Home() {
-  const contacts = await getContacts();
+  const contacts = await getContactsCached();
 
   return (
     <main className="min-h-screen relative selection:bg-blue-500/30">
@@ -16,7 +16,7 @@ export default async function Home() {
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-500 tracking-tight mb-4">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-linear-to-br from-white to-zinc-500 tracking-tight mb-4">
             Qualificado
           </h1>
 

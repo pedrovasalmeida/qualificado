@@ -1,7 +1,7 @@
 "use server";
 
 import { createSupabaseAdminClient } from "@/lib/supabase-admin";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export type ContactStatus = "show" | "hidden";
 
@@ -81,7 +81,7 @@ export async function approveContact(
   }
 
   revalidatePath("/painel/contatos");
-  revalidatePath("/");
+  revalidateTag("contacts", "default");
   return { success: true };
 }
 
@@ -100,6 +100,7 @@ export async function dismissContact(
   }
 
   revalidatePath("/painel/contatos");
+  revalidateTag("contacts", "default");
   return { success: true };
 }
 
@@ -116,7 +117,7 @@ export async function updateContact(
   }
 
   revalidatePath("/painel/contatos");
-  revalidatePath("/");
+  revalidateTag("contacts", "default");
   return { success: true };
 }
 
@@ -132,7 +133,7 @@ export async function deleteContact(
   }
 
   revalidatePath("/painel/contatos");
-  revalidatePath("/");
+  revalidateTag("contacts", "default");
   return { success: true };
 }
 
@@ -149,7 +150,7 @@ export async function bulkDeleteContacts(
   }
 
   revalidatePath("/painel/contatos");
-  revalidatePath("/");
+  revalidateTag("contacts", "default");
   return { success: true };
 }
 
@@ -169,6 +170,6 @@ export async function bulkHideContacts(
   }
 
   revalidatePath("/painel/contatos");
-  revalidatePath("/");
+  revalidateTag("contacts", "default");
   return { success: true };
 }

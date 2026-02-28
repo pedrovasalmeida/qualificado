@@ -7,6 +7,7 @@ export async function getContacts(): Promise<Contact[]> {
   const { data, error } = await supabase
     .from("contacts")
     .select("*")
+    .eq("status", "show")
     .order("created_at", { ascending: false });
 
   if (error) {
